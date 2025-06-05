@@ -1,7 +1,11 @@
 """Command line interface for zero-iching."""
 import argparse
 import os
+from uuid import uuid4 as uuid
+
 from zero_iching import main as zero_iching_alias
+from zero_iching.helpers import print_hexagram
+from zero_iching.uuid_diviner import hexagrams_from_uuid
 
 
 def load_help_text() -> str:
@@ -24,6 +28,24 @@ def build_parser() -> argparse.ArgumentParser:
         epilog=help_text,
     )
     parser.add_argument("--version", action="version", version="zero-iching 0.1.0")
+
+    subparsers = parser.add_subparsers(dest="command")
+
+    uuid_parser = subparsers.add_parser(
+        "uuid", help="Derive hexagrams from a UUID"
+    )
+    uuid_parser.add_argument(
+        "--uuid",
+        default=None,
+        help="UUID to divine from. Provide empty string to generate a random one.",
+    )
+    uuid_parser.add_argument(
+        "-n",
+        type=int,
+        default=1,
+        help="Number of hexagrams to produce",
+    )
+
     return parser
 
 
@@ -32,7 +54,18 @@ def main(argv=None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
 
-    # Execute the library main function
+    if args.command == "uuid":
+        uuid_str = args.uuid
+        if uuid_str is None or uuid_str == "":
+            uuid_str = str(uuid())
+        hexagrams = hexagrams_from_uuid(uuid_str, n=args.n)
+        print(f"UUID: {uuid_str}")
+        for hexagram in hexagrams:
+            print_hexagram(hexagram)
+            print()
+        return 0
+
+    # Default behavior
     return zero_iching_alias()
 
 
