@@ -62,8 +62,10 @@ def main(argv=None) -> int:
         hexagrams = hexagrams_from_uuid(uuid_str, n=args.n)
         print()
         print(f"got {uuid_str}. ")
-        print(f"here are your hexagrams: {'|'.join([HEXAGRAM_NAMES[i] for i in hexagrams])}")
+        print(hexagrams)
         print()
+        print(f"UUID: {uuid_str}")
+        return 0
 
     # Default behavior
     return zero_iching_alias()
