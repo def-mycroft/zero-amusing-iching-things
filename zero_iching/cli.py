@@ -5,7 +5,7 @@ from uuid import uuid4 as uuid
 
 from zero_iching import main as zero_iching_alias
 from zero_iching.helpers import print_hexagram
-from zero_iching.uuid_diviner import hexagrams_from_uuid
+from zero_iching.uuid_diviner import hexagrams_from_uuid, YANG_LINE, YIN_LINE
 
 
 def load_help_text() -> str:
@@ -60,8 +60,10 @@ def main(argv=None) -> int:
             uuid_str = str(uuid())
         hexagrams = hexagrams_from_uuid(uuid_str, n=args.n)
         print(f"UUID: {uuid_str}")
-        for hexagram in hexagrams:
-            print_hexagram(hexagram)
+        for lower, upper in hexagrams:
+            bits = lower + upper
+            lines = [YANG_LINE if b == "1" else YIN_LINE for b in bits]
+            print_hexagram(lines)
             print()
         return 0
 
