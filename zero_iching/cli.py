@@ -3,9 +3,10 @@ import argparse
 import os
 from uuid import uuid4 as uuid
 
+from jinja2 import Environment, FileSystemLoader, select_autoescape
+
 from zero_iching import main as zero_iching_alias
-from zero_iching.helpers import print_hexagram
-from zero_iching.helpers import HEXAGRAM_NAMES
+from zero_iching.helpers import HEXAGRAM_NAMES, HEXAGRAM_EN_NAMES, HEXAGRAM_SYMBOLS
 from zero_iching.uuid_diviner import hexagrams_from_uuid
 
 
@@ -50,6 +51,36 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def render_uuid_hexagrams(uuid_str: str, n: int = 1) -> str:
+    """Return a formatted string for ``uuid`` command output."""
+    hex_list = hexagrams_from_uuid(uuid_str, n=n)
+    structured = []
+    for i in range(0, len(hex_list), 2):
+        code = hex_list[i]
+        lower, upper = hex_list[i + 1]
+        structured.append(
+            {
+                "code": code,
+                "lower_code": lower,
+                "upper_code": upper,
+                "lower_name": HEXAGRAM_NAMES.get(lower, ""),
+                "upper_name": HEXAGRAM_NAMES.get(upper, ""),
+                "lower_en": HEXAGRAM_EN_NAMES.get(lower, ""),
+                "upper_en": HEXAGRAM_EN_NAMES.get(upper, ""),
+                "lower_symbol": HEXAGRAM_SYMBOLS.get(lower, ""),
+                "upper_symbol": HEXAGRAM_SYMBOLS.get(upper, ""),
+            }
+        )
+
+    template_dir = os.path.join(os.path.dirname(__file__), "templates")
+    env = Environment(
+        loader=FileSystemLoader(template_dir),
+        autoescape=select_autoescape(),
+    )
+    template = env.get_template("uuid_output.jinja2")
+    return template.render(uuid=uuid_str, hexagrams=structured)
+
+
 def main(argv=None) -> int:
     """Entry point for the command line."""
     parser = build_parser()
@@ -59,12 +90,8 @@ def main(argv=None) -> int:
         uuid_str = args.uuid
         if uuid_str is None or uuid_str == "":
             uuid_str = str(uuid())
-        hexagrams = hexagrams_from_uuid(uuid_str, n=args.n)
-        print()
-        print(f"got {uuid_str}. ")
-        print(hexagrams)
-        print()
-        print(f"UUID: {uuid_str}")
+        output = render_uuid_hexagrams(uuid_str, n=args.n)
+        print(output)
         return 0
 
     # Default behavior

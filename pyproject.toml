@@ -9,6 +9,10 @@ description = "Template CLI for zero-iching"
 authors = [{name = "Example", email = "example@example.com"}]
 readme = "README.md"
 requires-python = ">=3.8"
+dependencies = ["jinja2>=3.0"]
 
 [project.scripts]
 zero-iching = "zero_iching.cli:main"
+
+[tool.setuptools.package-data]
+"zero_iching.templates" = ["*.jinja2"]

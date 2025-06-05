@@ -31,4 +31,7 @@ Derive three hexagrams from a UUID via the CLI:
 zero-iching uuid --uuid 'd682da34-d320-4e72-824b-a42b0c801270' -n 3
 ```
 
+The output is now formatted using a Jinja2 template and includes trigram names
+and symbols.
+
 If `--uuid` is provided with an empty string, a random UUID4 will be used.
