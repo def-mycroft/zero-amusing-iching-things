@@ -7,12 +7,12 @@ YIN_LINE = "- -"
 
 
 def hexagrams_from_uuid(uuid_str: str, n: int = 1, offset: int = 0):
-    """Return ``n`` hexagrams derived from ``uuid_str`` starting at ``offset``.
+    """Return ``n`` hexagram codes derived from ``uuid_str``.
 
-    The UUID string is first converted to a 128-bit binary string using
-    :func:`uuid_to_bin`. Six-bit chunks of this bitstream are then mapped to
-    lines from bottom to top where ``1`` is a solid line (yang) and ``0`` is a
-    broken line (yin).
+    Each hexagram is represented as a list containing two three-character
+    binary strings. The first element corresponds to the lower trigram and
+    the second element to the upper trigram. Bits are ordered from bottom to
+    top so that ``'111'`` represents three solid (yang) lines.
     """
     bit_stream = uuid_to_bin(uuid_str)
 
@@ -27,6 +27,7 @@ def hexagrams_from_uuid(uuid_str: str, n: int = 1, offset: int = 0):
     hexagrams = []
     for i in range(n):
         bits = bit_stream[start + i * 6 : start + (i + 1) * 6]
-        lines = [YANG_LINE if b == "1" else YIN_LINE for b in bits]
-        hexagrams.append(lines)
+        lower = bits[:3]
+        upper = bits[3:]
+        hexagrams.append([lower, upper])
     return hexagrams
