@@ -5,6 +5,7 @@ from uuid import uuid4 as uuid
 
 from zero_iching import main as zero_iching_alias
 from zero_iching.helpers import print_hexagram
+from zero_iching.helpers import HEXAGRAM_NAMES
 from zero_iching.uuid_diviner import hexagrams_from_uuid
 
 
@@ -59,11 +60,10 @@ def main(argv=None) -> int:
         if uuid_str is None or uuid_str == "":
             uuid_str = str(uuid())
         hexagrams = hexagrams_from_uuid(uuid_str, n=args.n)
-        print(f"UUID: {uuid_str}")
-        for hexagram in hexagrams:
-            print_hexagram(hexagram)
-            print()
-        return 0
+        print()
+        print(f"got {uuid_str}. ")
+        print(f"here are your hexagrams: {'|'.join([HEXAGRAM_NAMES[i] for i in hexagrams])}")
+        print()
 
     # Default behavior
     return zero_iching_alias()

@@ -2,8 +2,8 @@
 
 from zero_iching.helpers import uuid_to_bin
 
-YANG_LINE = "---"
-YIN_LINE = "- -"
+YANG_LINE = "1"
+YIN_LINE = "0"
 
 
 def hexagrams_from_uuid(uuid_str: str, n: int = 1, offset: int = 0):
@@ -28,5 +28,5 @@ def hexagrams_from_uuid(uuid_str: str, n: int = 1, offset: int = 0):
     for i in range(n):
         bits = bit_stream[start + i * 6 : start + (i + 1) * 6]
         lines = [YANG_LINE if b == "1" else YIN_LINE for b in bits]
-        hexagrams.append(lines)
+        hexagrams.append(''.join(lines))
     return hexagrams
