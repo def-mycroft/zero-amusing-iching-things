@@ -1,3 +1,4 @@
+--------------------------------------------------------------------------------
 UUID: {{ uuid }}
 
 {% for hx in hexagrams %}
@@ -5,3 +6,4 @@ Hexagram {{ loop.index }}: {{ hx.upper_symbol }} above {{ hx.lower_symbol }}
   Names: {{ hx.upper_name }} ({{ hx.upper_en }}) over {{ hx.lower_name }} ({{ hx.lower_en }})
   Binary: {{ hx.code }} ({{ hx.upper_code }} | {{ hx.lower_code }})
 {% endfor %}
+--------------------------------------------------------------------------------
