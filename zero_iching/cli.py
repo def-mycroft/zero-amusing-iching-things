@@ -53,6 +53,29 @@ def build_parser() -> argparse.ArgumentParser:
         help="Number of hexagrams to produce",
     )
 
+    game_parser = subparsers.add_parser(
+        "game", help="Generate interactive Dao Field HTML"
+    )
+    game_parser.add_argument("--grid", action="store_true", help="Create grid html")
+    game_parser.add_argument(
+        "-n",
+        "--size",
+        type=int,
+        default=64,
+        help="Grid size (n x n)",
+    )
+    game_parser.add_argument(
+        "--savegrid",
+        default=None,
+        help="Path to saved grid json",
+    )
+    game_parser.add_argument(
+        "-o",
+        "--output",
+        default="dao_field.html",
+        help="Output HTML file",
+    )
+
     return parser
 
 
@@ -99,6 +122,17 @@ def main(argv=None) -> int:
             uuid_str = str(uuid())
         output = render_uuid_hexagrams(uuid_str, n=args.n)
         print(output)
+        return 0
+
+    if args.command == "game" and args.grid:
+        from zero_iching.dao_field import DaoField
+
+        if args.savegrid:
+            field = DaoField.load(args.savegrid)
+        else:
+            field = DaoField.generate(args.size)
+        field.write_html(args.output)
+        print(f"HTML written to {args.output}")
         return 0
 
     # Default behavior
