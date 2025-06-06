@@ -60,9 +60,9 @@ def render_uuid_hexagrams(uuid_str: str, n: int = 1) -> str:
     """Return a formatted string for ``uuid`` command output."""
     hex_list = hexagrams_from_uuid(uuid_str, n=n)
     structured = []
-    for i in range(0, len(hex_list), 2):
-        code = hex_list[i]
-        lower, upper = hex_list[i + 1]
+    for code in hex_list:
+        lower = code[:3]
+        upper = code[3:]
         structured.append(
             {
                 "code": code,
