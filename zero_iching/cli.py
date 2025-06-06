@@ -6,7 +6,12 @@ from uuid import uuid4 as uuid
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from zero_iching import main as zero_iching_alias
-from zero_iching.helpers import HEXAGRAM_NAMES, HEXAGRAM_EN_NAMES, HEXAGRAM_SYMBOLS
+from zero_iching.helpers import (
+    HEX_DESC,
+    HEXAGRAM_NAMES,
+    HEXAGRAM_EN_NAMES,
+    HEXAGRAM_SYMBOLS,
+)
 from zero_iching.uuid_diviner import hexagrams_from_uuid
 
 
@@ -69,6 +74,8 @@ def render_uuid_hexagrams(uuid_str: str, n: int = 1) -> str:
                 "upper_en": HEXAGRAM_EN_NAMES.get(upper, ""),
                 "lower_symbol": HEXAGRAM_SYMBOLS.get(lower, ""),
                 "upper_symbol": HEXAGRAM_SYMBOLS.get(upper, ""),
+                "lower_desc": HEX_DESC.get(lower, ""),
+                "upper_desc": HEX_DESC.get(upper, ""),
             }
         )
 
