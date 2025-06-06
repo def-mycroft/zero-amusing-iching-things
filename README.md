@@ -2,13 +2,9 @@
 
 A template command line interface package.
 
-### 🔢 `hexagrams_from_uuid`: Deriving I Ching Hexagrams from UUIDs
+### 🔢 `hexagrams_from_bits`: Waterfall Reduction
 
-The `hexagrams_from_uuid` function deterministically converts a UUID string into one or more I Ching hexagrams. It interprets the UUID as a 128-bit binary stream and slices this stream into 6-bit chunks.
-
-Each chunk is returned as two three-bit codes representing the lower and upper trigrams. Bits are ordered from **bottom to top** so that `"111"` corresponds to three solid yang lines. The trigram codes can be mapped to their traditional names via `HEXAGRAM_NAMES`.
-
-Because UUIDs are 128-bit values, up to 21 hexagrams can be derived in a single call (`21 * 6 = 126 bits used`), with 2 bits remaining unused. This creates a structured, non-arbitrary way of interpreting UUIDs as symbols—ideal for symbolic systems, playful divination, or creative applications that blend data with ancient Chinese metaphysics.
+`hexagrams_from_bits` accepts any binary string and collapses it into hexagrams using a **waterfall** folding process. Starting from the full width of the input, each subsequent row is produced by XOR-ing adjacent bits. The rows shrink by one bit per step, forming a cascade until only `6 × n` bits remain. Those final bits encode the requested hexagrams. The CLI helper `hexagrams_from_uuid` simply converts a UUID to binary and delegates to this function.
 
 
 ## Installation
@@ -45,4 +41,11 @@ hexagram alongside an ASCII rendering:
 from zero_iching.uuid_demo import visualize_uuid
 
 visualize_uuid("d682da34-d320-4e72-824b-a42b0c801270", n=2)
+```
+
+The repository also includes a small `demo.py` that visualizes the waterfall
+reduction for any integer:
+
+```bash
+python demo.py 123456 2
 ```
