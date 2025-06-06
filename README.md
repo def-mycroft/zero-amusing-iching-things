@@ -35,3 +35,14 @@ The output is now formatted using a Jinja2 template and includes trigram names
 and symbols.
 
 If `--uuid` is provided with an empty string, a random UUID4 will be used.
+
+### Visualization Demo
+
+The `visualize_uuid` helper displays the bit chunks used to build each
+hexagram alongside an ASCII rendering:
+
+```python
+from zero_iching.uuid_demo import visualize_uuid
+
+visualize_uuid("d682da34-d320-4e72-824b-a42b0c801270", n=2)
+```
